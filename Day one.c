@@ -18,7 +18,7 @@ void main(){
     printf("Enter the number of details to be added \n");scanf("%d",&length);
     printf("Enter the details in the order of name roll no and total marks\n");
     for(i;i<length;i++){
-            scanf("%s %d %f",(pointer+i)->name,(pointer+i)->roll_no,(pointer+i)->total_marks);
+            scanf("%s %d %f",(pointer+i)->name,&(pointer+i)->roll_no,&(pointer+i)->total_marks);
     }
 }
 
