@@ -1,0 +1,6 @@
+.vscode/tasks.json
+*.exe
+*.o
+Array_ADT.c
+inset function.c
+hello-world.c
