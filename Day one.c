@@ -18,6 +18,28 @@ typedef struct{
     float total_marks;
     char name[50];
 }student;
+
+int main(){
+    int length,choice=0;
+    student record[max];
+    student *pointer = record;
+    do{
+    printf("1. Insert record \n 2.Search Record\n 3.display record\n 4.delete record\n 5.Exit\n");
+    printf("Enter your choice\n");scanf("%d",&choice);
+    if (choice==1){
+            //insert function
+            printf("How many student details to be added\n");scanf("%d",&length);
+            insert(pointer,length);
+        }
+    else if (choice==2){
+            //search function
+            search(pointer,length);
+            }
+    }
+    while (choice!=5);
+    return 0;
+}
+
 void insert(student *pointer,int number_of_terms){
     int i=0;
     printf("Enter the details in the order of name roll no and total marks\n");
@@ -30,7 +52,7 @@ void search(student *pointer,int length){
     printf("Enter the roll no to find\n");
     scanf("%d",&target);
     for (i;i<length;i++){
-            if (pointer->roll_no == target){
+            if ((pointer+i)->roll_no == target){
                 flag=1;
                 printf("target found..\n");
                 break;
@@ -43,25 +65,4 @@ void search(student *pointer,int length){
     }
 }
 
-int main(){
-    int length,choice=0;
-    student record[max];
-    student *pointer = record;
-    printf("1. Insert record \n 2.Search Record\n 3.display record\n 4.delete record\n 5.Exit\n");
-    while (choice !=5){
 
-        if (choice==1){
-            //insert function
-            printf("How many student details to be added\n");scanf("%d",&length);
-            insert(pointer,length);
-        }
-        else if (choice==2){
-            //search function
-            search(pointer,length);
-
-
-        }
-    }
-
-    return 0;
-}
