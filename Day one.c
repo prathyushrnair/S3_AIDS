@@ -29,6 +29,7 @@ int main(){
     if (choice==1){
             //insert function
             printf("How many student details to be added\n");scanf("%d",&length);
+            int *size=length;
             insert(pointer,length);
         }
     else if (choice==2){
@@ -42,7 +43,7 @@ int main(){
     }
     else if (choice==4){
         //remove record function
-        //remove(pointer,length);
+        delete_record(pointer,size);
         }
     }
     while (choice!=5);
@@ -50,6 +51,7 @@ int main(){
 }
 
 void insert(student *pointer,int number_of_terms){
+    //insert function
     int i=0;
     printf("Enter the details in the order of name roll no and total marks\n");
     for(i;i<number_of_terms;i++){
@@ -57,6 +59,7 @@ void insert(student *pointer,int number_of_terms){
     }
 }
 void search(student *pointer,int length){
+    //search function
     int target,flag=0,i=0;
     printf("Enter the roll no to find\n");
     scanf("%d",&target);
@@ -74,6 +77,7 @@ void search(student *pointer,int length){
     }
 }
 void display(student *pointer,int length){
+    //display function
     int i=0;
     printf("Records present \nName\tRoll Number\tTotal Marks\n");
     for(int i=0; i<length ; i++){
@@ -81,8 +85,28 @@ void display(student *pointer,int length){
     }
     printf("-- End of Record ---");
 }
-/*void remove(student *pointer,int length){
-    continue;
+void delete_record(student *pointer,int *length){
+    // Delete function
+    int target,i=0,j=0,flag=0;
+    printf("Enter the Roll number to be deleted \n");
+    scanf("%d",&target);
+    for (i;i<length;i++){
+        if ((pointer+i)->roll_no == target){
+            flag=1;
+            for (j=i;j<length-1;j++){
+                    *(pointer+j)=*(pointer+j+1);
+            }
+            (*length)--;
+            break;
+    }
 }
-*/
+
+    if (flag == 1){
+        printf("The element is found and deleted\n");
+    }else{
+        printf("The element is not found\n");
+    }
+
+}
+
 
