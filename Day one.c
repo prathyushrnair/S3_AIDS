@@ -24,7 +24,7 @@ int main(){
     student record[max];
     student *pointer = record;
     do{
-    printf("1. Insert record \n 2.Search Record\n 3.display record\n 4.delete record\n 5.Exit\n");
+    printf("1. Insert record \n 2.Search Record\n 3.display record\n 4.remove record\n 5.Exit\n");
     printf("Enter your choice\n");scanf("%d",&choice);
     if (choice==1){
             //insert function
@@ -35,6 +35,15 @@ int main(){
             //search function
             search(pointer,length);
             }
+
+    else if (choice==3){
+        //display function
+        display(pointer,length);
+    }
+    else if (choice==4){
+        //remove record function
+        //remove(pointer,length);
+        }
     }
     while (choice!=5);
     return 0;
@@ -64,5 +73,16 @@ void search(student *pointer,int length){
         printf("Search unsuccessful\n");
     }
 }
-
+void display(student *pointer,int length){
+    int i=0;
+    printf("Records present \nName\tRoll Number\tTotal Marks\n");
+    for(int i=0; i<length ; i++){
+            printf("%s \t%d \t%.2f\n",(pointer+i)->name,(pointer+i)->roll_no,(pointer+i)->total_marks);
+    }
+    printf("-- End of Record ---");
+}
+/*void remove(student *pointer,int length){
+    continue;
+}
+*/
 
