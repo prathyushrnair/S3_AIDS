@@ -34,13 +34,20 @@ void insert(polynomial *p,int coefficient, int exponent){
 
 void display(polynomial *p){
     TERM *current=p->head;
+    if (current == NULL){
+    printf("Empty polynomial.\n");
+    return;
+    }
     printf("Here are the details\n");
     while(current!=NULL){
             printf("%d ^ %d",current->coefficient,current->exponent);
-    }
+
     if(current->link==NULL){
         printf("+");
-    }printf("\n");
+    }
+    current=current->link;
+    }
+    printf("\n");
 
 }
 
@@ -58,12 +65,19 @@ void main(){
                 printf("Polynomials are created\n");
         }
         else if (choices==2){
+                int n,coefficient,exponent;
                 //insert function choice
-                insert(&p1,2,3);
-                printf("Inserted 2 initialize inputs\n");
+                printf("Enter the number of terms to be added\n");
+                scanf("%d",&n);
+                printf("Enter the coefficient and Exponent of the terms\n");
+                for(int i=0;i<n;i++){
+                    scanf("%d %d",&coefficient,&exponent);
+                    insert(&p1,coefficient,exponent);
+
+                }printf("Record Entered...\n");
         }
         else if(choices==3){
-            display(&p2);
+            display(&p1);
         }
 }
 }
