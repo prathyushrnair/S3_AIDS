@@ -51,6 +51,45 @@ void display(polynomial *p){
 
 }
 
+polynomial add(polynomial *p1, polynomial *p2) {
+    polynomial result = create();
+
+    TERM *a = p1->head;
+    TERM *b = p2->head;
+
+    while (a != NULL && b != NULL) {
+        if (a->exponent == b->exponent) {
+            int sum = a->coefficient + b->coefficient;
+            if (sum != 0)
+                insert(&result, sum, a->exponent);
+            a = a->link;
+            b = b->link;
+        }
+        else if (a->exponent > b->exponent) {
+            insert(&result, a->coefficient, a->exponent);
+            a = a->link;
+        }
+        else {
+            insert(&result, b->coefficient, b->exponent);
+            b = b->link;
+        }
+    }
+
+    // Append remaining terms
+    while (a != NULL) {
+        insert(&result, a->coefficient, a->exponent);
+        a = a->link;
+    }
+
+    while (b != NULL) {
+        insert(&result, b->coefficient, b->exponent);
+        b = b->link;
+    }
+
+    return result;
+}
+
+
 void main(){
     int choices;
     polynomial p1=create();
@@ -58,7 +97,9 @@ void main(){
     while(1){
          printf("These are the choices\n");
         printf(" 1.Create Polynomial\n 2.Insert an polynomial with args pointer , coefficient and exponent\n");
-        printf(" 3.Display Polynomials with arg as polynomial pointer");
+        printf(" 3.Display Polynomials with arg as polynomial pointer\n");
+        printf("4. Add two polynomials (P1 + P2)\n");
+        printf("Break\n");
         printf("Enter the choices from above\n");
         scanf("%d",&choices);
         if (choices==1){
@@ -71,13 +112,22 @@ void main(){
                 scanf("%d",&n);
                 printf("Enter the coefficient and Exponent of the terms\n");
                 for(int i=0;i<n;i++){
-                    scanf("%d %d",&coefficient,&exponent);
+                    scanf("%d",&coefficient);
+                    scanf("%d",&exponent);
                     insert(&p1,coefficient,exponent);
-
-                }printf("Record Entered...\n");
+                    printf("Record Entered...\n");
         }
         else if(choices==3){
-            display(&p1);
+                //display function
+                display(&p1);
+        }
+        else if(choices==4){
+            //add polynomial function
+            polynomial result=add(&p1,&p2);
+            display(&result);
+        }
+        else{
+            break;
         }
 }
 }
