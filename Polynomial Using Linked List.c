@@ -60,7 +60,7 @@ polynomial add(polynomial *p1, polynomial *p2) {
     while (a != NULL && b != NULL) {
         if (a->exponent == b->exponent) {
             int sum = a->coefficient + b->coefficient;
-            if (sum != 0)
+            if (sum != 0){
                 insert(&result, sum, a->exponent);
             a = a->link;
             b = b->link;
@@ -87,7 +87,7 @@ polynomial add(polynomial *p1, polynomial *p2) {
     }
 
     return result;
-}
+}}
 
 
 void main(){
@@ -110,13 +110,13 @@ void main(){
                 //insert function choice
                 printf("Enter the number of terms to be added\n");
                 scanf("%d",&n);
-                printf("Enter the coefficient and Exponent of the terms\n");
+                printf("Enter the coefficient and Exponent of the terms and polynomial name\n");
                 for(int i=0;i<n;i++){
                     scanf("%d",&coefficient);
                     scanf("%d",&exponent);
                     insert(&p1,coefficient,exponent);
                     printf("Record Entered...\n");
-        }
+        }}
         else if(choices==3){
                 //display function
                 display(&p1);
