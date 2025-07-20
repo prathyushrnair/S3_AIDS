@@ -20,14 +20,12 @@ polynomial *create_poly(){ //evide pointer ann return cheyunne
             exit(1);
     }
     p->head=NULL;
-    printf("Polynomial of pointer is being created\n");
     return(p);
 }
 // <---create function over---->
 void display(polynomial *poly){
     if (poly->head==NULL){
-            printf("The polynomial is empty\n");
-            exit(0);
+            return;
     }
     else{
         node *term=poly->head;
@@ -101,7 +99,6 @@ polynomial *add(polynomial *poly1,polynomial *poly2)
         }
     //to display the results we call display function as well
     return result;
-    display(result);
 }
 //add function implemented
 int main()
@@ -111,7 +108,7 @@ int main()
     //initialised 2 polynomials
     while(1){
     int choices;
-    printf("1.Insert Polynomial\n 2.Display Polynomial\n 3.Add Polynomials\n 4.Break ");
+    printf("1.Insert Polynomial\n 2.Display Polynomial\n 3.Add Polynomials\n 4.Break \n");
     printf("Enter the choices\n");
     scanf("%d",&choices);
     if (choices==1){
@@ -156,6 +153,7 @@ int main()
         polynomial *result;
         //option selected for addition
         result=add(p1,p2);
+        display(result);
     }
     else{
         break;
