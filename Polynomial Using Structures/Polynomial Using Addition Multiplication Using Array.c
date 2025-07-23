@@ -11,14 +11,13 @@ typedef struct {
 } poly;
 void display(poly *p) {
 	int i;
-	for(i=0; i<p->n; i++) {
+	for(i=0; i<p->n; i++){
 		printf("%d x^%d",p->arr[i].coeff,p->arr[i].expo);
-		if(i<p->n-1) {
+		if(i<p->n-1){
 			printf(" + ");
 		}
 	}
 	printf("\n");
-
 }
 
 poly add(poly *p1,poly *p2) {
