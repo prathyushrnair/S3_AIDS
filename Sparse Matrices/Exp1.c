@@ -1,5 +1,5 @@
 //this program is to find the sum of two sparse polynomials using arrays
-//the input is 2 sparse matrix and we have to perform Addition
+//the input is 2 sparse polynomials and we have to perform Addition
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 10
@@ -13,24 +13,24 @@ struct term arr1[MAX],arr2[MAX],arr3[MAX];
 int i=0,j=0,k=0,na,nb;
 printf("Please enter the number of non zero elements for Poly1\n");
 scanf("%d",&na);
-for(i;i<na;i++){
+for(i=0;i<na;i++){
     printf("Enter coeff and expo for term %d of A[in ascending order pls]\n",i+1);
     scanf("%d %d",&arr1[i].coeff,&arr1[i].expo);
     }//elements are inserted
 printf("Please enter the number of non zero elements for Poly2\n");
 scanf("%d",&nb);
-for(j;j<nb;j++){
+for(j=0;j<nb;j++){
     printf("Enter the coeff and expo for the term %d of B [in ascending order ]\n",j+1);
     scanf("%d %d",&arr2[j].coeff,&arr2[j].expo);
 }
 i=0;
 j=0;
 while(i<na && j<nb){
-    if(arr1[i].expo<arr2[j].expo){
+    if(arr1[i].expo > arr2[j].expo){
         arr3[k].expo=arr2[j].expo;
         arr3[k++].coeff=arr2[j++].coeff;
     }
-    else if(arr1[i].expo >arr2[j].expo){
+    else if(arr1[i].expo < arr2[j].expo){
         arr3[k].expo=arr1[i].expo;
         arr3[k++].coeff=arr1[i].coeff;
 
