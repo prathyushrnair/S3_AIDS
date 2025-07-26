@@ -30,7 +30,7 @@ void transpose(term arr1[],term arr2[],int rows,int cols,int terms){
         for(int j=0;j<terms;j++){
             if(arr1[j].column==i){
                 arr2[k].row=arr1[j].column;
-                arr2[k].column=arr2[j].row;
+                arr2[k].column=arr1[j].row;
                 arr2[k].val=arr1[j].val;
                 k++;
             }
@@ -41,9 +41,9 @@ void transpose(term arr1[],term arr2[],int rows,int cols,int terms){
 
 void add(term arr1[],term arr2[],term arr3[],int *terms1,int *terms2,int *terms3){
     int i=0,j=0,k=0;
-    while(i<*terms1 && j<terms2){
-        if(arr1[i].row<arr2[j].row || (arr1[i].row=arr2[j].row && arr1[i].column<arr2[j].column)){
-            arr3[k++]=arr2[j++];
+    while(i<*terms1 && j<*terms2){
+        if(arr1[i].row<arr2[j].row || (arr1[i].row==arr2[j].row && arr1[i].column<arr2[j].column)){
+            arr3[k++]=arr1[i++];
         }
         else if(arr1[i].row>arr2[j].row ||(arr1[i].row==arr2[j].row && arr1[i].column>arr2[j].column)){
             arr3[k++]=arr2[j++];
@@ -53,10 +53,10 @@ void add(term arr1[],term arr2[],term arr3[],int *terms1,int *terms2,int *terms3
             arr3[k++].val=arr1[i++].val+arr2[j++].val;
         }
     }
-    while(i<terms1){
+    while(i<*terms1){
         arr3[k++]=arr1[i++];
     }
-    while(j<terms2){
+    while(j<*terms2){
         arr3[k++]=arr2[j++];
     }
     *terms3=k;
@@ -71,7 +71,7 @@ int main(){
  insert(a,&rows1,&cols1,&terms1);
  printf("Second Matrix:\n");
  insert(b,&rows2,&cols2,&terms2);
- transpose(a,result,rows1,cols1,terms2);
+ transpose(a,result,rows1,cols1,terms1);
  display(result,terms1);
  if(rows1==rows2 && cols1==cols2){
     add(a,b,c,&terms1,&terms2,&terms3);
