@@ -1,0 +1,151 @@
+#include<stdio.h>
+typedef struct{
+    int row,column,value;
+}term;
+typedef struct{
+    int r,c,n;
+    term data[100];
+}sparse;
+sparse convert(int a[50][50],int m,int n){
+    sparse s;
+    s.r=m;
+    s.c=n;
+    s.n=0;
+    for(int i=0;i<m;i++){
+        for(int j=0;j<n;j++){
+            if(a[i][j]!=0){
+                s.data[s.n].row=i;
+                s.data[s.n].column=j;
+                s.data[s.n].value=a[i][j];
+                s.n++;
+            }
+        }
+    }
+    return s;
+}
+void display(sparse s){
+    printf("%d\t%d\t%d\n",s.r,s.c,s.n);
+    for(int i=0;i<s.n;i++)
+    {
+        printf("%d\t%d\t%d\n",s.data[i].row,s.data[i].column,s.data[i].value);
+    }
+}
+sparse transpose(sparse s){
+    sparse t;
+    t.r=s.c;
+    t.c=s.r;
+    t.n=s.n;
+    for(int i=0;i<s.n;i++)
+    {
+         t.data[i].row=s.data[i].column;
+         t.data[i].column=s.data[i].row;
+         t.data[i].value=s.data[i].value;
+    }
+    for(int i=0;i<s.n-1;i++){
+        for(int j=i+1;j<s.n;j++){
+            if((t.data[i].row>t.data[j].row)||((t.data[i].row==t.data[j].row)&&(t.data[i].column>t.data[j].column))){
+                term temp=t.data[i];
+                t.data[i]=t.data[j];
+                t.data[j]=temp;
+            }
+        }
+    }
+    return t;
+}
+sparse add(sparse a,sparse b){
+    sparse sum;
+    sum.r=a.r;
+    sum.c=a.c;
+    sum.n=0;
+    if(a.r!=b.r||a.c!=b.c){
+        printf("Dimensions of 2 matrices does not match.Addition not possible.\n");
+        return sum;
+    }
+    int i=0,j=0,k=0;
+    while(i<a.n && j<b.n){
+        if(a.data[i].row==b.data[i].row&&a.data[i].column==b.data[i].column){
+            sum.data[k].row=a.data[i].row;
+            sum.data[k].column=a.data[i].column;
+            sum.data[k].value=a.data[i].value+b.data[j].value;
+            i++;
+            j++;
+            k++;
+        }
+        else if(a.data[i].row<b.data[j].row||((a.data[i].row==b.data[j].row)&&(a.data[i].column<b.data[j].column))){
+            sum.data[k]=a.data[i];
+            k++;
+            i++;
+        }
+        else{
+            sum.data[k]=b.data[j];
+            j++;
+            k++;
+        }
+    }
+    while(i<a.n){
+        sum.data[k]=a.data[i];
+        k++;
+        i++;
+    }
+    while(j<b.n){
+        sum.data[k]=b.data[j];
+        k++;
+        j++;
+    }
+    sum.n=k;
+    return sum;
+}
+void main(){
+    int a[50][50],b[50][50],i,j,ch,m1,n1,m2,n2;
+    sparse sp1,sp2,sum,strans1,strans2;
+    while(1){
+    printf("****MENU******\n1. INPUT & CONVERT M1\n2. INPUT & CONVERT M2\n3. DISPLAY SPARSE1\n4. DISPLAY SPARSE2\n5. ADD S1&S2\n6. TRANSPOSE S1\n7. TRANSPOSE S2\n8. EXIT\n");
+    scanf("%d",&ch);
+    if(ch==1){
+        printf("Enter row and column of the matrice:\n");
+        scanf("%d%d",&m1,&n1);
+        printf("Enter elements:\n");
+        for(i=0;i<m1;i++){
+            for(j=0;j<n1;j++){
+                scanf("%d",&a[i][j]);
+            }
+        }
+        sp1=convert(a,m1,n1);
+    }
+    else if(ch==2){
+        printf("Enter row and column of the matrice:\n");
+        scanf("%d%d",&m2,&n2);
+        printf("Enter elements:\n");
+        for(i=0;i<m2;i++){
+            for(j=0;j<n2;j++){
+                scanf("%d",&b[i][j]);
+            }
+        }
+        sp2=convert(b,m2,n2);
+    }
+    else if(ch==3){
+        display(sp1);
+    }
+    else if(ch==4){
+        display(sp2);
+    }
+    else if(ch==5){
+        sum=add(sp1,sp2);
+        display(sum);
+    }
+    else if(ch==6){
+        strans1=transpose(sp1);
+        display(strans1);
+    }
+    else if(ch==7){
+        strans2=transpose(sp2);
+        display(strans2);
+    }
+    else if(ch==8){
+        break;
+    }
+    else{
+        printf("Invalid choice.\n");
+    }
+    }
+}
