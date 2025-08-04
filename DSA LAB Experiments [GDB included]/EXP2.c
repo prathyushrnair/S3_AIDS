@@ -1,85 +1,115 @@
-// Transpose of a sparse matrix and sum of two sparse matrices.
+/*
+matrices -> tuple format ->transpose ->add the 2 tuple format matrices
+3 functions -> Convert Transpose ADD
+*/
 #include<stdio.h>
 #include<stdlib.h>
-#define MAX 10
-typedef struct trm{
-    int row;
-    int column;
-    int val;
-}term;
-//data definition  ⬆️
-void display(term mat[],int terms){
-    printf("Enter the details in this format\n");
-    printf("ROW \tCOLUMN \tVALUE \t\n");
-    for(int i=0;i<terms;i++){
-        printf("%d\t%d\t%d\n",mat[i].row,mat[i].column,mat[i].val);
-    }
+#define MAX 100
+#define MAX_COL 100
+typedef struct {
+	int row;
+	int column;
+	int value;
+} values;
+
+typedef struct {
+	int no_row;
+	int no_column;
+	int non_zero_terms;
+	values arr[MAX];
+} sparse;
+
+sparse convert_to_sparse(int arr1[][MAX_COL],int rows,int cols,sparse *arrr1 ) {
+	//take rows column no of terms
+	arrr1->no_row=rows;
+	arrr1->no_column=cols;
+	arrr1->non_zero_terms=0;
+	for(int i=0; i<rows; i++) {
+		for(int j=0; j<cols; j++) {
+			if (arr1[i][j]!=0) {
+				arrr1->arr[arrr1->non_zero_terms].row=i;
+				arrr1->arr[arrr1->non_zero_terms].column=j;
+				arrr1->arr[arrr1->non_zero_terms].value=arr1[i][j];
+				arrr1->non_zero_terms++;
+			}
+		}
+	}
+	return *arrr1;
 }
-void insert(term mat[],int *row,int *col,int *terms){
-    printf("Enter rows , columns , non zero terms\n");
-    scanf("%d%d%d",row,col,terms);
-    printf("Enter element in this format ROW COLUMN VALUE\n");
-    for(int i=0;i<*terms;i++){
-        scanf("%d %d %d",&mat[i].row,&mat[i].column,&mat[i].val);
-    }
+//the above functions converts a normal array arr1 to a sparse matrix arrr1
+void transpose(sparse *OG,sparse *result) {
+	result->no_row=OG->no_column;
+	result->no_column=OG->no_row;
+	result->non_zero_terms=OG->non_zero_terms;
+	for(int i=0; i<OG->non_zero_terms; i++) {
+		result->arr[i].row=OG->arr[i].column;
+		result->arr[i].column=OG->arr[i].row;
+		result->arr[i].value=OG->arr[i].value;
+	}
+}
+void add(sparse *arr1, sparse *arr2,sparse *result) {
+	if (arr1->no_row!=arr2->no_row || arr1->no_column!=arr2->no_column) {
+		printf("Matrices dimensions are out of bonds\n");
+		return;
+	}
+	result->no_row=arr1->no_row;
+	result->no_column=arr1->no_column;
+	result->non_zero_terms=0;
+	int i=0,j=0;
+	while(i<arr1->non_zero_terms && j<arr2->non_zero_terms) {
+		if(arr1->arr[i].row<arr2->arr[i].row ||(arr1->arr[i].row==arr2->arr[i].row && arr1->arr[i].column<arr2->arr[j].column)) {
+			result->arr[result->non_zero_terms++]=arr1->arr[i++];
+		}
+		else if(arr1->arr[i].row=arr2->arr[j].row && arr1->arr[i].column==arr2->arr[j].column) {
+			result->arr[result->non_zero_terms].row=arr1->arr[i].row;
+			result->arr[result->non_zero_terms].column=arr1->arr[i].column;
+			result->arr[result->non_zero_terms].value=arr1->arr[i].value+arr2->arr[j].value;
+			result->non_zero_terms++;
+			i++;
+			j++;
+		}
+		else {
+			result->arr[result->non_zero_terms]=arr2->arr[j++];
+		}
+
+	}
+	while(i<arr1->non_zero_terms) {
+		result->arr[result->non_zero_terms++]=arr1->arr[i++];
+	}
+	while(j<arr2->non_zero_terms) {
+		result->arr[result->non_zero_terms++]=arr2->arr[j++];
+	}
 }
 
-void transpose(term arr1[],term arr2[],int rows,int cols,int terms){
-    int k=0;
-    for(int i=0;i<cols;i++){
-        for(int j=0;j<terms;j++){
-            if(arr1[j].column==i){
-                arr2[k].row=arr1[j].column;
-                arr2[k].column=arr1[j].row;
-                arr2[k].val=arr1[j].val;
-                k++;
-            }
-        }
-    }
-
+void display(sparse *sp) {
+	printf("Details are in this way\n");
+	printf("ROW\tCOLUMN\tVALUE\n");
+	for(int i=0; i<sp->non_zero_terms; i++) {
+		printf("%d\t%d\t%d\n",sp->arr[i].row,sp->arr[i].column,sp->arr[i].value);
+	}
 }
 
-void add(term arr1[],term arr2[],term arr3[],int *terms1,int *terms2,int *terms3){
-    int i=0,j=0,k=0;
-    while(i<*terms1 && j<*terms2){
-        if(arr1[i].row<arr2[j].row || (arr1[i].row==arr2[j].row && arr1[i].column<arr2[j].column)){
-            arr3[k++]=arr1[i++];
-        }
-        else if(arr1[i].row>arr2[j].row ||(arr1[i].row==arr2[j].row && arr1[i].column>arr2[j].column)){
-            arr3[k++]=arr2[j++];
-        }
-        else{
-            arr3[k]=arr1[i];
-            arr3[k++].val=arr1[i++].val+arr2[j++].val;
-        }
-    }
-    while(i<*terms1){
-        arr3[k++]=arr1[i++];
-    }
-    while(j<*terms2){
-        arr3[k++]=arr2[j++];
-    }
-    *terms3=k;
+int main() {
+	int arr1[][MAX_COL]= {{1,0,0},{0,2,0},{0,0,3}};
+	int arr2[][MAX_COL]= {{0,1,0},{2,0,0},{0,0,4}};
+	sparse sa,sb,tranposedd,summ;
+	convert_to_sparse(arr1,3,3,&sa);
+	convert_to_sparse(arr2,3,3,&sb);
+	printf("Matrix 1\n");
+	display(&sa);
+	printf("Matrix 2\n");
+	display(&sb);
+	transpose(&sa,&tranposedd);
+	printf("transpose of the matrix \n");
+	display(&tranposedd);
+	add(&sa,&sb,&summ);
+	printf("SUmmation of 2 matrices\n");
+	display(&summ);
+
+	return 0;
 }
 
-int main(){
- term a[MAX],b[MAX],c[MAX],result[MAX];
- int rows1,rows2;
- int cols1,cols2;
- int terms1,terms2,terms3=0;
- printf("First Matrix:\n");
- insert(a,&rows1,&cols1,&terms1);
- printf("Second Matrix:\n");
- insert(b,&rows2,&cols2,&terms2);
- transpose(a,result,rows1,cols1,terms1);
- display(result,terms1);
- if(rows1==rows2 && cols1==cols2){
-    add(a,b,c,&terms1,&terms2,&terms3);
-    printf("\nSum of Matrices:\n");
-    display(c,terms3);
- }
- else{
-    printf("\nCannot Add-Different DIMENSIONS\n");
- }
- return 0;
- }
+
+
+
+

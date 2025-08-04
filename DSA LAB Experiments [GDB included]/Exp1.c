@@ -1,5 +1,3 @@
-//this program is to find the sum of two sparse polynomials using arrays
-//the input is 2 sparse polynomials and we have to perform Addition
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 10
@@ -8,59 +6,83 @@ typedef struct term{
     int expo;
 }trm;
 
-int main(){
-struct term arr1[MAX],arr2[MAX],arr3[MAX];
-int i=0,j=0,k=0,na,nb;
-printf("Please enter the number of non zero elements for Poly1\n");
-scanf("%d",&na);
-for(i=0;i<na;i++){
-    printf("Enter coeff and expo for term %d of A[in ascending order pls]\n",i+1);
-    scanf("%d %d",&arr1[i].coeff,&arr1[i].expo);
-    }//elements are inserted
-printf("Please enter the number of non zero elements for Poly2\n");
-scanf("%d",&nb);
-for(j=0;j<nb;j++){
-    printf("Enter the coeff and expo for the term %d of B [in ascending order ]\n",j+1);
-    scanf("%d %d",&arr2[j].coeff,&arr2[j].expo);
-}
-i=0;
-j=0;
-while(i<na && j<nb){
-    if(arr1[i].expo > arr2[j].expo){
-        arr3[k].expo=arr2[j].expo;
-        arr3[k++].coeff=arr2[j++].coeff;
-    }
-    else if(arr1[i].expo < arr2[j].expo){
-        arr3[k].expo=arr1[i].expo;
-        arr3[k++].coeff=arr1[i].coeff;
+int main() {
+	trm arr1[MAX],arr2[MAX],arr3[MAX*2]; //allocation to resultant poly must be >>
+	//initialise the iterators
+	for(int x=0; x<MAX*2; x++) {
+		arr3[x].coeff=0;
+		arr3[x].expo=0;
+	}//clearing all garbage values
+	int i=0,j=0,k=0,n1,n2;
+	printf("No of non zero elements Poly 1\n");
+	scanf("%d",&n1);
+	for(i; i<n1; i++) {
+		printf("Enter co p1 %d \n",i+1);
+		scanf("%d",&arr1[i].coeff);
+		printf("Entr expo p1 %d \n",i+1);
+		scanf("%d",&arr1[i].expo);
+	}
+	printf("No of non zero elements poly2\n");
+	scanf("%d",&n2);
+	for(j; j<n2; j++) {
+		printf("Enter coeff poly 2 %d\n",j+1);
+		scanf("%d",&arr2[j].coeff);
+		printf("Enter expo poly 2\n");
+		scanf("%d",&arr2[j].expo);
+	}
+	i=0;
+	j=0;
+	while(i<n1 && j<n2) {
+		if(arr1[i].expo<arr2[j].expo) {
+			arr3[k].expo=arr1[i].expo;
+			arr3[k].coeff=arr1[i].coeff;
+			i++;
+			k++;
+		}
 
-    }
-    else{
-        int sum=0;
-        sum=arr1[i].coeff+arr2[j].coeff;
-        if (sum!=0){
-        arr3[k].coeff=sum;
-        arr3[k].expo=arr1[i].expo;
-        k++;
-        }
-    i++;
-    j++;
-    }
-}
-while(i<na){
-    arr3[k++]=arr1[i++];
-
-}
-while(j<nb){
-    arr3[k++]=arr2[j++];
-}
-printf("Result=\n");
-int m=0;
-for(m;m<k;m++){
-    printf("%dx^%d",arr3[m].coeff,arr3[m].expo);
-    if(m!=k-1 && arr3[m+1].coeff>=0){
-            printf(" + ");
-    }
-}
-return 0;
+		else if(arr1[i].expo>arr2[j].expo) {
+			arr3[k].expo=arr2[j].expo;
+			arr3[k].coeff=arr2[j].coeff;
+			k++;
+			j++;
+		}
+		else {
+			int sum=0;
+			sum=arr1[i].coeff+arr2[j].coeff;
+			if (sum!=0) {
+				arr3[k].coeff=sum;
+				arr3[k].expo=arr1[i].expo;
+			}
+			k++;
+		}
+		i++;
+		j++;
+	}
+	//now take care of the left over terms
+	while(i<n1) {
+		arr3[k].coeff=arr1[i].coeff;
+		arr3[k].expo=arr1[i].expo;
+		i++;
+		k++;
+	}
+	while(j<n2) {
+		arr3[k].coeff=arr2[j].coeff;
+		arr3[k].expo=arr2[j].expo;
+		k++;
+		j++;
+	}
+	//print the results
+	printf("Result =\n");
+	int m=0;
+	for(m; m<k; m++) {
+		printf("%d",arr3[m].coeff);
+		if (arr3[m].expo!=0) {
+			printf("X^%d",arr3[m].expo);
+		}
+		//condition to check for " + "
+		if (m!=k-1 && (arr3[m+1].coeff>0)) {      //checks until k-1 and negeative sign of next coeff
+			printf(" + ");
+		}
+	}
+	return 0;
 }
