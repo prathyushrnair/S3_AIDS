@@ -1,10 +1,10 @@
 #include<stdio.h>
 #include<stdlib.h>
 #define MAX 10
-typedef struct term{
-    int coeff;
-    int expo;
-}trm;
+typedef struct term {
+	int coeff;
+	int expo;
+} trm;
 
 int main() {
 	trm arr1[MAX],arr2[MAX],arr3[MAX*2]; //allocation to resultant poly must be >>
