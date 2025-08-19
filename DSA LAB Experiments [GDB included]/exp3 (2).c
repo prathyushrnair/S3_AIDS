@@ -8,6 +8,7 @@ the functions are isempty() isful() enqueue() dequeue() peek() display()
 #include<stdbool.h>
 #define MAX 10
 #define SIZE 5
+#include "dqueue_exp3.c"
 typedef struct {
 	int rear;
 	int front;
@@ -66,7 +67,7 @@ void display(queue_1 *q) {
 }
 
 void queue_fu() {
-	int choices;
+	int choices=0;
 	queue_1 que;
 	printf("Intialising a Queue\n");
 	create_queue(&que);
@@ -147,7 +148,7 @@ void cdisplay(cqueue_1 *cq) {
 			}
 		}
 		else {
-			for(int i=cq->front; i<MAX; i++) {
+			for(int i=cq->front; i<SIZE; i++) {
 				printf("%d\n",cq->arr[i]);
 			}
 			for(int i=0; i<=cq->rear; i++) {
@@ -216,7 +217,7 @@ void insert_at_rr(dqueue_1 *dq,int value) {
 		if(dq->front==-1) {
 			dq->front=dq->rear=0;
 		}
-		else if(dq->rear=MAX-1) {
+		else if(dq->rear==MAX-1) {
 			dq->rear=0;
 		}
 		else {
@@ -226,14 +227,14 @@ void insert_at_rr(dqueue_1 *dq,int value) {
 	}
 }
 
-int deletefront(queue_1 *dq) {
+int deletefront(dqueue_1 *dq) {
 	if (dq->front==-1) {
 		printf("Deque underflow \n");
 		return -1;
 	}
 	else {
 		int value   =dq->arr[dq->front];
-		if(dq->front=dq->rear) {
+		if(dq->front==dq->rear) {
 			dq->front=dq->rear=-1;
 		}
 		else if(dq->front==MAX-1) {
@@ -246,14 +247,15 @@ int deletefront(queue_1 *dq) {
 	}
 }
 
-int deleterear(queue_1 *dq) {
+
+int deleterear(dqueue_1 *dq) {
 	if (dq->front==-1) {
 		printf("Deque underflow \n");
 		return -1;
 	}
 	else {
 		int value=dq->arr[dq->rear];
-		if(dq->front=dq->rear) {
+		if(dq->front==dq->rear) {
 			dq->front=dq->rear-1;
 		}
 		else if(dq->rear==0) {
@@ -266,26 +268,8 @@ int deleterear(queue_1 *dq) {
 	}
 }
 
-void ddisplay(dqueue_1 *dq) {
-	if(dq->front==-1) {
-		printf("Deque is empty\n");
-		return;
-	}
-	if(dq->front <= dq->rear) {
-		for(int i=dq->front; i<=dq->rear; i++) {
-			printf("%d",dq->arr[i]);
-		}
-	}
-	else {
-		for(int i=dq->front; i<MAX; i++) {
-			printf("%d",dq->arr[i]);
-		}
-		for(int i=0; i<dq->rear; i++) {
-			printf("%d",dq->arr[i]);
-		}
-	}
-	printf("\n");
-}
+
+
 
 void dqueue_fu() {
 	dqueue_1 dque;
@@ -299,23 +283,23 @@ void dqueue_fu() {
 		if (choic==1) {
 			printf("Insert at front selected\n");
 			insert_at_fr(&dque,30);
-			ddisplay(&dque);
+			cdisplay(&dque);
 
 		}
 		else if(choic==2) {
 			printf("Insert at rear selected\n");
 			insert_at_rr(&dque,60);
-			ddisplay(&dque);
+			cdisplay(&dque);
 		}
 		else if(choic==3) {
 			printf("Delete at rear selected\n");
 			deleterear(&dque);
-			ddisplay(&dque);
+			cdisplay(&dque);
 		}
 		else if(choic==4) {
 			printf("Delete at front selected\n");
 			deletefront(&dque);
-			ddisplay(&dque);
+			cdisplay(&dque);
 		}
 		else {
 			break;
@@ -323,19 +307,19 @@ void dqueue_fu() {
 	}
 }
 
-
 void main() {
 	int c;
-	printf("Enter choice 1 2 3 else to break\n");
+
+	printf(" 1.Normal Queue\n 2.Circular Queue\n 3.Double Ended Queue\n Else Break\n");
 	scanf("%d",&c);
 	if (c==1) {
-		queue_fu;
+		queue_fu();
 	}
 	else if(c==2) {
-		cqueue_fu;
+		cqueue_fu();
 	}
 	else if(c==3) {
-		dqueue_fu;
+		dqueue_fu();
 	}
 	else {
 		exit(1);

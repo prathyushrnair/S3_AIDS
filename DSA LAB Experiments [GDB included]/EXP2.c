@@ -47,38 +47,42 @@ void transpose(sparse *OG,sparse *result) {
 		result->arr[i].value=OG->arr[i].value;
 	}
 }
-void add(sparse *arr1, sparse *arr2,sparse *result) {
-	if (arr1->no_row!=arr2->no_row || arr1->no_column!=arr2->no_column) {
-		printf("Matrices dimensions are out of bonds\n");
-		return;
-	}
-	result->no_row=arr1->no_row;
-	result->no_column=arr1->no_column;
-	result->non_zero_terms=0;
-	int i=0,j=0;
-	while(i<arr1->non_zero_terms && j<arr2->non_zero_terms) {
-		if(arr1->arr[i].row<arr2->arr[i].row ||(arr1->arr[i].row==arr2->arr[i].row && arr1->arr[i].column<arr2->arr[j].column)) {
-			result->arr[result->non_zero_terms++]=arr1->arr[i++];
-		}
-		else if(arr1->arr[i].row=arr2->arr[j].row && arr1->arr[i].column==arr2->arr[j].column) {
-			result->arr[result->non_zero_terms].row=arr1->arr[i].row;
-			result->arr[result->non_zero_terms].column=arr1->arr[i].column;
-			result->arr[result->non_zero_terms].value=arr1->arr[i].value+arr2->arr[j].value;
-			result->non_zero_terms++;
-			i++;
-			j++;
-		}
-		else {
-			result->arr[result->non_zero_terms]=arr2->arr[j++];
-		}
+void add(sparse *arr1, sparse *arr2, sparse *result) {
+    if (arr1->no_row != arr2->no_row || arr1->no_column != arr2->no_column) {
+        printf("Matrices dimensions are out of bounds\n");
+        return;
+    }
 
-	}
-	while(i<arr1->non_zero_terms) {
-		result->arr[result->non_zero_terms++]=arr1->arr[i++];
-	}
-	while(j<arr2->non_zero_terms) {
-		result->arr[result->non_zero_terms++]=arr2->arr[j++];
-	}
+    result->no_row = arr1->no_row;
+    result->no_column = arr1->no_column;
+    result->non_zero_terms = 0;
+
+    int i = 0, j = 0;
+    while (i < arr1->non_zero_terms && j < arr2->non_zero_terms) {
+        if (arr1->arr[i].row < arr2->arr[j].row ||
+            (arr1->arr[i].row == arr2->arr[j].row && arr1->arr[i].column < arr2->arr[j].column)) {
+            result->arr[result->non_zero_terms++] = arr1->arr[i++];
+        }
+        else if (arr1->arr[i].row == arr2->arr[j].row && arr1->arr[i].column == arr2->arr[j].column) {
+            result->arr[result->non_zero_terms].row = arr1->arr[i].row;
+            result->arr[result->non_zero_terms].column = arr1->arr[i].column;
+            result->arr[result->non_zero_terms].value = arr1->arr[i].value + arr2->arr[j].value;
+            result->non_zero_terms++;
+            i++;
+            j++;
+        }
+        else {
+            result->arr[result->non_zero_terms++] = arr2->arr[j++];
+        }
+    }
+
+    while (i < arr1->non_zero_terms) {
+        result->arr[result->non_zero_terms++] = arr1->arr[i++];
+    }
+
+    while (j < arr2->non_zero_terms) {
+        result->arr[result->non_zero_terms++] = arr2->arr[j++];
+    }
 }
 
 void display(sparse *sp) {
